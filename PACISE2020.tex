@@ -125,42 +125,41 @@ and summarize it by creating new phrases and sentences. In our previous
 research~\cite{day_extractive}, we implemented two extractive summarization
 methods: Term Frequency-Inverse Document Frequency (TF-IDF) and TextRank
 and presented the results of running the algorithms on three different
-corpora: Moby-Dick by Herman Melville, a selection of Reuters news
+corpora:~\emph{Moby-Dick} by Herman Melville, a selection of Reuters news
 articles, and a selection of posts on Reddit. Both algorithms performed
 well on the short stories from Reddit, however they struggled to
-determine the story arch from the larger fictional works and the news
+determine the story arc from the larger fictional works and the news
 articles.
 
 
 In the domain of Natural Language Processing (NLP), word
 embeddings~\cite{mikolov2013efficient} allow machines to produce representative,
 a fixed-length vector from a single word. This was a massive
-breakthrough in abstractive summarization mainly because many machine
+breakthrough in NLP because many machine
 learning algorithms take a fixed-length vector as their input. Most
 previous attempts of word embeddings were lossy or produced vectors of
 an unwieldy length. Another benefit of this vector representation is
 that it allows a direct numerical comparison between the words. This
 work has been expanded from words to both emojis~\cite{Eisner_2016}
-and sentences~\cite{pg2017unsu} in our research. Emojis are a
+and sentences~\cite{pg2017unsu}. Emojis are a
 pictographic language that is commonly used on the Internet and within
-text messages.
+text messages. In the latest emoji
+standard, there are 2,823 individual characters that can be both used alone and
+combined with joining emoji modify traits such as gender and skin color.
 
-Our research aims to tackle abstractive summarization in a novel way
-by compressing a sentence into a series of emojis. In the latest emoji
-standard, there are 2,823 characters and the number of emojis can be
-increased rapidly when modifiers (e.g. gender and skin tone) are taken
-into account. There are two motivations for using emojis. First, emojis
-are very information-dense. This allows us to compress large chunks of
-the sentence into a single emoji. For example, the running emoji
-(\img{emojis/1f3c3.png}) can represent a man who is running away from something in just one
-character. That is, this single emoji can compress an entire sentence.
-Second, emojis have no formal grammar. This avoids a large issue on most
+Our research aims to tackle abstractive summarization in a novel way by
+compressing a sentence into a series of emojis. There are two motivations for
+using emojis. First, emojis are very information-dense. This allows us to
+compress large chunks of information into a single emoji. That is, this single
+emoji can compress an entire sentence. For example, the running emoji (\img{emojis/1f3c3.png}) can represent a man who is running away from something
+or a man participating in a track event in just one
+character. Second, emojis have no formal grammar. This avoids a large issue on most
 neural machine translation, so we can focus on the adequacy rather than
 the fluidity of the produced translation. There are two possible uses
 for our algorithm text summarization and communication facilitation.
 Producing a summary of a document using emojis could prove to be a
 quick way to let someone decide if a document is interesting to her/him
-without reading the whole document. It could be used to facilitate
+without reading the whole document. It also could be used to facilitate
 communication across language barriers between people with learning
 disabilities~\cite{vandeghinste2017translating}.
 
@@ -181,7 +180,7 @@ dataset and tackles a similar problem.
 
 There have been other systems that accomplish a similar task in
 different ways. Emoji Dick~\cite{radford2016telephone} is a crowdsourced
-translation of Moby Dick into emojis using Amazon Mechanical Turk
+translation of Moby Dick into emojis using Amazon's Mechanical Turk
 crowdsourcing platform. In addition to explicit translation, some email
 clients are using pictographs to augment communication for individuals
 with cognitive disabilities~\cite{vandeghinste2017translating}. Outside of the realm
@@ -196,7 +195,7 @@ bigrams, and trigrams are used, which are n-grams of length one, two,
 and three, respectively. N-grams are pertinent in their use as the terms
 within the TF-IDF scoring discussed iand as the units of comparison for
 a given sentence when evaluating the cosine distances discussed. Both
-of these topics are discussed later in this paper.To better understand
+of these topics are discussed later in this paper. To better understand
 the scoring discussion presented in later sections, we define concept of
 Term Frequency (TF) and Inverse Document Frequency (IDF) as part of
 related work. The Term
@@ -211,7 +210,7 @@ the Term Frequency, the TF is typically defined by Equation~\eqref{eq:tf}:
 where~\(f\) is the number of occurrences,~\(t\) is the term, and\(d\) is
 the document.
 
-The Inverse Document Frequency (IDF) is the relation on how many
+The Inverse Document Frequency (IDF) is the relation of how many
 documents are in the corpus against how many of those documents contain
 a given term. The IDF is often defined as the logarithm of how many
 documents are in the corpus divided by how many documents that the given
@@ -318,9 +317,10 @@ increases exponentially. In fact, sentences with more than 11 words
 results in a memory exception in the development environment when
 trying to summarize with the exhaustive algorithm.
 
-\begin{figure}[H]
+\begin{figure}[h]
   \begin{center}
-    \includegraphics[width=\columnwidth]{figures/timing.png}
+    % \includegraphics[width=\columnwidth]{figures/timing.png}
+    \scalebox{0.6}{\input{figures/timing.pgf}}
     \caption{Translation time of two n-gram sequence generation
       algorithms\label{fig:timing}}
   \end{center}
