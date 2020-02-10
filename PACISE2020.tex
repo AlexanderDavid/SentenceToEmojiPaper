@@ -93,7 +93,17 @@
 \setlength{\parskip}{0em}
 \section*{ABSTRACT}
 \setlength{\parskip}{1em}
-Emojis are a collection of emoticons that have been standardized by the Unicode Consortium. Currently, there are over 3,000 emojis in the Unicode standard. These small pictographs can represent an object as vague as a laughter (\img{emojis/1f923.png}) to something as specific as a passport control (\img{emojis/1f6c2.png}). Due to their high information density and the sheer amount, emojis have become prevalent in common communication media such as SMS and Twitter; there is a need to increase natural language understanding in the emoji domain. To this end, we present the CoNFET (Composition of N-grams for Emoji Translation) algorithm to translate an English sentence into a sequence of emojis. This translation algorithm consists of three main parts: n-grams, vectorized linguistic space and Term Frequency-Inverse Document Frequency. First, the input sentence is split into its constituent n-grams either in an exhaustive manner or using dependency relations. Second, the n-grams of the sentence are translated into emojis using the nearest neighbor in a vectorized linguistic space. Finally, these translations are scored using either a simple average or an average weighted by the Term Frequency-Inverse Document Frequency (TF-IDF) score of the n-gram. As the result, the sequence of emojis with the highest score is selected as an output of the sentence summarization.
+Emojis are a collection of emoticons that have been standardized by the Unicode
+Consortium. Currently, there are over 3,000 emojis in the Unicode standard.
+These small pictographs can represent an object as vague as a laughter
+(\img{emojis/1f923.png}) to something as specific as a passport control
+(\img{emojis/1f6c2.png}). Due to their high information density and the sheer
+amount, emojis have become prevalent in common communication media such as SMS
+and Twitter; thus, there is a need to increase natural language understanding in
+the emoji domain. To this end, we present the CoNFET (Composition of N-grams for
+Emoji Translation) algorithm to translate an English sentence into a sequence of
+emojis. This translation algorithm consists of three main parts: n-gram sequence
+generation, n-gram to emoji translation, and translation scoring. First, the input sentence is split into its constituent n-grams either in an exhaustive manner or using dependency relations. Second, the n-grams of the sentence are translated into emojis using the nearest neighbor in a vectorized linguistic space. Finally, these translations are scored using either a simple average or an average weighted by the Term Frequency-Inverse Document Frequency (TF-IDF) score of the n-gram. As the result, the sequence of emojis with the highest score is selected as an output of the sentence summarization.
 
 \begin{keywords}
   Natural Language Processing, Abstractive Summarization, Emoji, Word2Vec
@@ -470,7 +480,7 @@ extraordinarily small cosine differences to certain emojis. For
 instance, the word ``a'' maps directly to~~\img{emojis/1f4af.png}. In order to address the
 varying impact of individual words, inspiration is drawn from one of the
 abstractive summarization techniques, the Term Frequency- Inverse
-Document Frequency (TF-IDF).~
+Document Frequency (TF-IDF).
 
 Using an open-source Python library Gensim~\cite{gensim}, the
 TF-IDF scores are created for every term in a given corpus. It is
@@ -512,7 +522,7 @@ TF-IDF score as shown in Equation \refeq{eq:averageTF-IDFScore}.
 
 \begin{equation}
   \textrm{Average score weighted by
-    TF-IDF} = \frac{\sum_{i=1}^kw_i\times s_i}{\sum_{i=1}^kw_i}\label{eq:averageTF-IDFScore}
+    TF-IDF} = \frac{\sum_{i=1}^{k}w_{i}\times s_i}{\sum_{i=1}^{k}w_{i}}\label{eq:averageTF-IDFScore}
 \end{equation}
 
 where~\(s_{i}\) is the cosine similarity score of
@@ -555,14 +565,14 @@ API, a number of tweets were gathered for each emoji. Each tweet was
 scored using TextBlob and the scores for each emoji were averaged. Then,
 the emoji with the sentiment score closest to the sentiment score of the
 input sentence is selected as the sentiment emoji. The preliminary
-results from scoring tweets are shown in Figure \ref{fig:tweetScoring}. However, almost every
+results from scoring tweets are shown in Figure~\ref{fig:tweetScoring}. However, almost every
 single emoji was clustered at zero. There are two reasons for this: the
 size of the dataset and preprocessing of the tweet data. First, due to
 Twitter's rate limit, the dataset gathered was fairly limited. The
 issue is easily addressed by gathering data for a longer time. Secondly,
 misspellings, slang, and grammatically incorrect sentences yield poor
 results in TextBlob. For example, even a simple misspelling such as
-``'tightt'' for ``tight'' is enough to give the tweet a score of
+``tightt'' for ``tight'' is enough to give the tweet a score of
 zero. An implementation linking a dataset like Kaggle to sentiment
 scores of the input sentence might yield more fruit.
 
@@ -623,51 +633,46 @@ process is as follows:
 
 All of the code for this project was written in Python 3, using the
 following packages: SpaCy~\cite{spacy2}, NLTK~\cite{bird2009natural},
-Gensim~\cite{gensim}, TextBlob~\cite{TextBlob},~
-Sent2Vec~\cite{pg2017unsu}, NumPy\cite{numpy}, and
+Gensim~\cite{gensim}, TextBlob~\cite{TextBlob},
+~Sent2Vec~\cite{pg2017unsu}, NumPy\cite{numpy}, and
 Jupyter\cite{Kluyver:2016aa}.
 
 \section{Results\label{sec:results}}
 
-
 The results from the exhaustive n-gram generation algorithm are
-presented in Figure~{\ref{fig:extractive}}. Emojis are just
+presented in Figure~\ref{fig:extractive}. Emojis are just
 visualizations of specific descriptions as mentioned in Section 3.2. As
 such, some of these translations may not make sense unless the specific
 descriptions of emojis are known. For example, the n-gram ``They are
 playing'' is translated to the emoji~\img{emojis/1f3b4.png} as shown in the third
-test data in Figure~{\ref{fig:extractive}}. This emoji is known
+test data in Figure~\ref{fig:extractive}. This emoji is known
 as the ``Flower Playing Cards''. Once this description is known, the
 emoji translated sentence makes more sense.
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics[width=0.70\columnwidth]{figures/extractive.png}
-    \caption{{Results from the exhaustive n-gram generation algorithm
-    {\label{fig:extractive}}%
-    }}
+    \caption{Results from the exhaustive n-gram generation algorithm\label{fig:extractive}}
   \end{center}
 \end{figure}
 
 The results from the dependency tree n-gram generation algorithm are
-presented in Figure~{\ref{fig:dependency}. {These summary
+presented in Figure~\ref{fig:dependency}. These summary
 results are not as good as the results of the exhaustive algorithm.
-}{This is mainly because the dependency tree algorithm does not take
+This is mainly because the dependency tree algorithm does not take
 into account the score that the translation of the proposed sequence
 will have. On the other hand, the exhaustive algorithm splits the
-sentence as to maximize the resulting score.}
+sentence as to maximize the resulting score.
 \begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.70\columnwidth]{figures/dependency.png}
-\caption{{Results from the dependency tree n-gram generation algorithm
-{\label{fig:dependency}}%
-}}
-\end{center}
+  \begin{center}
+    \includegraphics[width=0.70\columnwidth]{figures/dependency.png}
+      \caption{Results from the dependency tree n-gram generation algorithm\label{fig:dependency}}
+  \end{center}
 \end{figure}
 
 \section{Conclusion}
 
-In this paper,~ a new algorithm for translation of English sentences
+In this paper, a new algorithm for translation of English sentences
 into a series of emojis, CoNFET is described. Emojis are becoming well
 understood in the domain of Natural Language Processing, so they make
 sense as an output medium for a new translation algorithm. CoNFET
@@ -675,10 +680,10 @@ accomplishes this goal through the use of the n-gram sequence generation
 algorithms combined with the n-gram to emoji translation and the scoring
 methods. This algorithm could be useful for the field of communication
 between individuals with cognitive disabilities or for describing a long
-document in a condensed {way }.~ ~
+document in a condensed way.
 
 One of the main drawbacks of this implementation was the
-limited~{dataset}. The dataset defines the complexity of the output
+limited dataset. The dataset defines the complexity of the output
 language, it is used as a translation mapping from emojis to English
 phrases and vice-versa. In the current implementation, there are 6,000
 entries in the dataset and only 1662 unique emojis. In the future, some
@@ -695,7 +700,7 @@ individually. Therefore, no previous context in the sentence is be used
 in the n-gram translation. If the previous n-grams can be taken into
 account while translating the current n-gram, this may produce a more
 representative emoji sequence. Also, the test plan detailed in
-Section~{\ref{sec:testPlan}}~should be implemented and
+Section~\ref{sec:testPlan} should be implemented and
 evaluated.
 
 \makeatother
