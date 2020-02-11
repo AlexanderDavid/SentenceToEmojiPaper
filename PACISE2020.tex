@@ -229,7 +229,7 @@ of the Term Frequency (TF) and the Inverse Document Frequency (IDF) as
 shown in Equation~\eqref{eq:tfidf}.
 
 \begin{equation}
-  TF-IDF= TF(t, d) \cdot IDF(t, D) \label{eq:tfidf}
+  TF-IDF(t, d, D) = TF(t, d) \cdot IDF(t, D) \label{eq:tfidf}
 \end{equation}
 
 Common words, such as `the', will appear in many documents and have a
@@ -266,7 +266,7 @@ The emoji sequence with the highest score is returned as the summary.
 
 \begin{figure*}[h]
   \begin{center}
-    \includegraphics[width=0.90\textwidth]{figures/flow.png}
+    \includegraphics[width=1.0\textwidth]{figures/flow.png}
     \caption{The overall flow of the combination of N-grams in Emoji Translation
       (CoNFET) system\label{fig:flow}}
   \end{center}
@@ -614,18 +614,18 @@ process is as follows:
   {For each machine translated sentence:}
     \begin{enumerate}
         \item
-          {Provide the user with the emojis}
+          {Provide the user with the emojis.}
         \item
-          {Provide the user with the length of the result sentence }
+          {Provide the user with the length of the result sentence.}
         \item
-          {Prompt the user to translate the emojis into a sentence}
+          {Prompt the user to translate the emojis into a sentence.}
     \end{enumerate}
 \item
   {For each pair of the machine translated sentence and the user
   translated sentence:}
     \begin{enumerate}
       \item
-        {Calculate the distance between the two sentences using Sent2Vec}
+        {Calculate the distance between the two sentences using Sent2Vec.}
     \end{enumerate}
 \end{enumerate}
 
@@ -646,12 +646,12 @@ such, some of these translations may not make sense unless the specific
 descriptions of emojis are known. For example, the n-gram ``They are
 playing'' is translated to the emoji~\img{emojis/1f3b4.png} as shown in the third
 test data in Figure~\ref{fig:extractive}. This emoji is known
-as the ``Flower Playing Cards''. Once this description is known, the
+as the ``Flower \emph{Playing} Cards''. Once this description is known, the
 emoji translated sentence makes more sense.
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=0.70\columnwidth]{figures/extractive.png}
+    \includegraphics[width=\columnwidth]{figures/extractive.png}
     \caption{Results from the exhaustive n-gram generation algorithm\label{fig:extractive}}
   \end{center}
 \end{figure}
@@ -663,9 +663,10 @@ This is mainly because the dependency tree algorithm does not take
 into account the score that the translation of the proposed sequence
 will have. On the other hand, the exhaustive algorithm splits the
 sentence as to maximize the resulting score.
+
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=0.70\columnwidth]{figures/dependency.png}
+    \includegraphics[width=\columnwidth]{figures/dependency.png}
       \caption{Results from the dependency tree n-gram generation algorithm\label{fig:dependency}}
   \end{center}
 \end{figure}
