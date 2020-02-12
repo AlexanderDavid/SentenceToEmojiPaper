@@ -156,7 +156,7 @@ or a man participating in a track event in just one
 character. Second, emojis have no formal grammar. This avoids a large issue on most
 neural machine translation, so we can focus on the adequacy rather than
 the fluidity of the produced translation. There are two possible uses
-for our algorithm text summarization and communication facilitation.
+for our algorithm: text summarization and communication facilitation.
 Producing a summary of a document using emojis could prove to be a
 quick way to let someone decide if a document is interesting to her/him
 without reading the whole document. It also could be used to facilitate
@@ -221,8 +221,7 @@ term appears in as shown in Equation~\eqref{eq:idf}:
 \end{equation}
 
 where~\(t\) is the term,~\(d\) is the
-document,~\(D\) is the corpus, and~\(\left|D\right|\) is
-how many documents are in the corpus.
+document within the corpus, and ~\(D\) is the corpus.
 
 The Term Frequency- Inverse Document Frequency (TF-IDF) is the product
 of the Term Frequency (TF) and the Inverse Document Frequency (IDF) as
@@ -315,9 +314,7 @@ tree sentence composition algorithms. If the input sentence has more
 than 10 words, the translation time using the exhaustive algorithm
 increases exponentially. In fact, sentences with more than 11 words
 results in a memory exception in the development environment when
-trying to summarize with the exhaustive algorithm. We executed this code through
-a Jupyter Notebook running within a Docker container on a system exposing one
-core of an Intel Xeon 6140 and 16Gb of RAM to the virtualized system.
+trying to summarize with the exhaustive algorithm. The CoNFET algorithm was executed through a Jupyter Notebook running within a Docker container on a system exposing one core of an Intel Xeon 6140 and 16 GB of RAM to the virtualized system.
 
 
 \begin{figure}[h]
@@ -551,9 +548,8 @@ translation, a sentiment emoji was proposed. Tagging the sentence with a
 library TextBlob~\cite{TextBlob}, a sentiment score is obtained for
 the input sentence. It results in the polarity and subjectivity scores
 that are corresponding to how positive and how factual TextBlob ranked
-the input, respectively. Initially, the table~\cite{TextBlob} in
-Figure~\ref{fig:sentimentTable} was used and the polarity is
-ranged from -1 to 0 and the subjectivity is ranged from -1 to 1.
+the input, respectively. Initially, the table in
+Figure~\ref{fig:sentimentTable} was used.
 
 \begin{figure}[H]
   \begin{center}
@@ -566,21 +562,25 @@ ranged from -1 to 0 and the subjectivity is ranged from -1 to 1.
 In order to allow more than the nine emojis seen in
 Figure~{\ref{fig:sentimentTable}} to take the place of the
 sentiment emoji as well as using emojis more in line with how they are
-used on social media, an iteration was introduced. Using Twitter's
+used on social media, emojis were scored using tweets. Using Twitter's
 API, a number of tweets were gathered for each emoji. Each tweet was
 scored using TextBlob and the scores for each emoji were averaged. Then,
-the emoji with the sentiment score closest to the sentiment score of the
+the emoji with the average sentiment score closest -- using the standard
+deviation as the distance -- to the sentiment score of the
 input sentence is selected as the sentiment emoji. The preliminary
 results from scoring tweets are shown in Figure~\ref{fig:tweetScoring}. However, almost every
-single emoji was clustered at zero. There are two reasons for this: the
+single emoji was clustered together at zero, which does not allow distinguishing
+between emojis when considering distance from the input. There are two reasons for this: the
 size of the dataset and preprocessing of the tweet data. First, due to
 Twitter's rate limit, the dataset gathered was fairly limited. The
 issue is easily addressed by gathering data for a longer time. Secondly,
 misspellings, slang, and grammatically incorrect sentences yield poor
 results in TextBlob. For example, even a simple misspelling such as
 ``tightt'' for ``tight'' is enough to give the tweet a score of
-zero. An implementation linking a dataset like Kaggle to sentiment
-scores of the input sentence might yield more fruit.
+zero. An implementation linking an existing public emoji-sentiment dataset from
+something  like Kaggle to sentiment
+scores of the input sentence instead of scoring the tweets using TextBlob might
+yield more fruit. This consideration was initially discarded for two reasons: first, because the largest dataset found only had around 1000 emojis and approximately 80 percent of emojis had fewer than 100 occurrences. Secondly, the emojis are tagged with their number of positive, negative, and neutral occurrences. How to appropriately map this onto TextBlob's two dimensional subjectivity/polarity scores was not immediately obvious. However, there are far fewer emojis that would be clustered at zero.
 
 \begin{figure*}[h]
   \begin{center}
@@ -645,7 +645,8 @@ Jupyter\cite{Kluyver:2016aa}. The dataset used is the dataset from the
 emoji2vec~\cite{Eisner_2016}.
 
 The results from the exhaustive n-gram generation algorithm are
-presented in Figure~\ref{fig:extractive}. The scores were produced using the TF-IDF weighting metric as it incorporated additional, meaningful analysis into the
+presented in Figure~\ref{fig:extractive}. Here, the average cosine difference was
+used. The scores were produced using the TF-IDF weighting metric as it incorporated additional, meaningful analysis into the
 score. Emojis are just visualizations of specific descriptions as mentioned in
 Section \ref{sec:TF-IDFWeighing}. As such, some of these translations may not
 make sense unless the specific descriptions of emojis are known. For example,
@@ -662,7 +663,8 @@ Cards''. Once this description is known, the emoji translated sentence makes mor
 \end{figure}
 
 The results from the dependency tree n-gram generation algorithm are
-presented in Figure~\ref{fig:dependency}. These summary
+presented in Figure~\ref{fig:dependency}. Again, average cosine difference was
+used.  These summary
 results are not as good as the results of the exhaustive algorithm.
 This is mainly because the dependency tree algorithm does not take
 into account the score that the translation of the proposed sequence
@@ -689,7 +691,7 @@ between individuals with cognitive disabilities or for describing a long
 document in a condensed way.
 
 One of the main drawbacks of this implementation was the
-limited dataset. The dataset defines the complexity of the output
+limited dataset~\cite{Eisner_2016}. The dataset defines the complexity of the output
 language, it is used as a translation mapping from emojis to English
 phrases and vice-versa. In the current implementation, there are 6,000
 entries in the dataset and only 1662 unique emojis. In the future, some
