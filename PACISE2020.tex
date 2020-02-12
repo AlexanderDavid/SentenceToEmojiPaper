@@ -166,7 +166,7 @@ disabilities~\cite{vandeghinste2017translating}.
 \section{Related Work}
 
 The algorithm presented in this paper is based on the concept of
-embeddings. Embeddings are a way of representing human text in a
+embeddings~\cite{WhatAreW70}. Embeddings are a way of representing human text in a
 machine-understandable format. Normally this representation is a vector
 of floats with a range from -1 to 1 and a length of 300 to 700 depending
 on the application. The specific sentence vectorization model that our
@@ -193,9 +193,9 @@ term can be anything like characters, syllables, or words. However, an
 n-gram is composed of words in our application. Commonly, unigrams,
 bigrams, and trigrams are used, which are n-grams of length one, two,
 and three, respectively. N-grams are pertinent in their use as the terms
-within the TF-IDF scoring discussed iand as the units of comparison for
-a given sentence when evaluating the cosine distances discussed. Both
-of these topics are discussed later in this paper. To better understand
+within the TF-IDF scoring as the units of comparison for a given sentence when
+evaluating the cosine differences. Both of these topics of these topics are
+discussed in section~\ref{sec:translationScoring}. To better understand
 the scoring discussion presented in later sections, we define concept of
 Term Frequency (TF) and Inverse Document Frequency (IDF) as part of
 related work. The Term
@@ -315,7 +315,10 @@ tree sentence composition algorithms. If the input sentence has more
 than 10 words, the translation time using the exhaustive algorithm
 increases exponentially. In fact, sentences with more than 11 words
 results in a memory exception in the development environment when
-trying to summarize with the exhaustive algorithm.
+trying to summarize with the exhaustive algorithm. We executed this code through
+a Jupyter Notebook running within a Docker container on a system exposing one
+core of an Intel Xeon 6140 and 16Gb of RAM to the virtualized system.
+
 
 \begin{figure}[h]
   \begin{center}
@@ -339,6 +342,7 @@ verb ``finished'' to inform who executed the action.
 \begin{figure}[H]
   \begin{center}
     %\includegraphics[width=0.90\columnwidth]{figures/syntax.png}
+    \resizebox{0.90\columnwidth}{!}{
     \begin{forest}
       [finished\\(VERB)
         [I\\(PRON)]
@@ -346,7 +350,9 @@ verb ``finished'' to inform who executed the action.
         [started\\(VERB)[just\\(ADV)][before\\(ADP)][class\\(NOUN)]]
       ]
     \end{forest}
-    \caption{Dependency tree for ``I finished the homework just before class started''\label{fig:dep}}
+    }
+    \caption{Dependency tree for ``I finished the homework just before class
+      started''\label{fig:dep}}
   \end{center}
 \end{figure}
 
@@ -629,7 +635,7 @@ process is as follows:
     \end{enumerate}
 \end{enumerate}
 
-\section{Implementation\label{sec:implementation}}
+\section{Implementation and Results\label{sec:implementationAndResults}}
 
 All of the code for this project was written in Python 3, using the
 following packages: SpaCy~\cite{spacy2}, NLTK~\cite{bird2009natural},
@@ -637,17 +643,15 @@ Gensim~\cite{gensim}, TextBlob~\cite{TextBlob},
 ~Sent2Vec~\cite{pg2017unsu}, NumPy\cite{numpy}, and
 Jupyter\cite{Kluyver:2016aa}.
 
-\section{Results\label{sec:results}}
-
 The results from the exhaustive n-gram generation algorithm are
-presented in Figure~\ref{fig:extractive}. Emojis are just
-visualizations of specific descriptions as mentioned in Section 3.2. As
-such, some of these translations may not make sense unless the specific
-descriptions of emojis are known. For example, the n-gram ``They are
-playing'' is translated to the emoji~\img{emojis/1f3b4.png} as shown in the third
-test data in Figure~\ref{fig:extractive}. This emoji is known
-as the ``Flower \emph{Playing} Cards''. Once this description is known, the
-emoji translated sentence makes more sense.
+presented in Figure~\ref{fig:extractive}. The scores were produced using the TF-IDF weighting metric as it incorporated additional, meaningful analysis into the
+score. Emojis are just visualizations of specific descriptions as mentioned in
+Section \ref{sec:TF-IDFWeighing}. As such, some of these translations may not
+make sense unless the specific descriptions of emojis are known. For example,
+the n-gram ``They are playing'' is translated to the
+emoji~\img{emojis/1f3b4.png} as shown in the third test data in
+Figure~\ref{fig:extractive}. This emoji is known as the ``Flower \emph{Playing}
+Cards''. Once this description is known, the emoji translated sentence makes more sense.
 
 \begin{figure}[H]
   \begin{center}

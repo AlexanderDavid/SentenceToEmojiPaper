@@ -1,0 +1,7 @@
+\begin{forest}
+      [finished\\(VERB)
+        [I\\(PRON)]
+        [homework\\(NOUN) [the\\(DET)]]
+        [started\\(VERB)[just\\(ADV)][before\\(ADP)][class\\(NOUN)]]
+      ]
+    \end{forest}
