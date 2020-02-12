@@ -5,6 +5,7 @@
 \usepackage{PACISEPaper} % Include the custom commands from the PACISEPaper.sty
 
 \usepackage{times} % Use the postscript times font
+\usepackage{enumitem}
 \usepackage{soul} % Strikeout, underline, space out, etc.
 \usepackage{url}
 \usepackage[hidelinks]{hyperref} % hrefs
@@ -357,7 +358,7 @@ This tree has certain redundancies that can be removed in order to form
 larger groupings of words as nodes. There are two rules used for this
 tree collapse:
 
-\begin{enumerate}
+\begin{enumerate}[label=(\arabic*)]
     \item{If a parent has only one child, then these two words are combined}
     \item{If two or more leaves are on the same level with the same parents, then they are combined}
 \end{enumerate}
@@ -609,7 +610,7 @@ the test. This leads to a slower overall testing process and removes the
 ability to test at each iteration.~The general flow for this test
 process is as follows:
 
-\begin{enumerate}
+\begin{enumerate}[label=(\arabic*)]
 \item
   Generate sentences in English.
 \item
