@@ -102,7 +102,7 @@ Emojis are a collection of emoticons that have been standardized by the Unicode 
 
 \section{Introduction}
 
-Automatic text summarization is a category of algorithms that aim to produce a small set of representative information from a larger input document. There are two general categories of automatic summarization: extractive and abstractive. Extractive summarization~\emph{extracts~}sentences and phrases that are already present within the document in order to produce an outline. While this method can produce representative summaries, it does have the drawback of limiting the vocabulary that can be used in the summary to the vocabulary within the original document. On the other hand, abstractive summarization tries to understand the information within the document and summarize it by creating new phrases and sentences. In our previous research~\cite{day_extractive}, we implemented two extractive summarization methods: Term Frequency-Inverse Document Frequency (TF-IDF) and TextRank and presented the results of running the algorithms on three different corpora:~\emph{Moby-Dick} by Herman Melville, a selection of Reuters news articles, and a selection of posts on Reddit. Both algorithms performed well on the short stories from Reddit. However, they failed to determine the story arc from the larger fictional works and the news articles.
+Automatic text summarization is a category of algorithms that aim to produce a small set of representative information from a larger input document. There are two general categories of automatic summarization: extractive and abstractive. Extractive summarization~\emph{extracts~}sentences and phrases that are already present within the document in order to produce an outline. While this method can produce representative summaries, it does have the drawback of limiting the vocabulary that can be used in the summary to the vocabulary within the original document. On the other hand, abstractive summarization tries to understand the information within the document and summarize it by creating new phrases and sentences. In our previous research~\cite{day_extractive}, we implemented two extractive summarization methods: Term Frequency-Inverse Document Frequency (TF-IDF) and TextRank and presented the results of running the algorithms on three different corpora:~\emph{Moby-Dick} by Herman Melville, a selection of Reuters news articles, and a selection of posts on Reddit. Both algorithms performed well on the short stories from Reddit. However, they did not perform optimally when presented with larger works which possesed a more complex story arc.
 
 In the domain of Natural Language Processing (NLP), word embeddings~\cite{mikolov2013efficient} allow machines to produce representative, a fixed-length vector from a single word. This was a massive breakthrough in NLP because many machine learning algorithms take a fixed-length vector as their input. Most previous attempts of word embeddings were lossy or produced vectors of an unwieldy length. Another benefit of this vector representation is that it allows a direct numerical comparison between the words. This work has been expanded from words to both emojis~\cite{Eisner_2016} and sentences~\cite{pg2017unsu}.
 
@@ -127,7 +127,7 @@ Inverse Document Frequency (IDF) is the relation of how many documents are in th
   IDF(t, D) = \log\frac{|D|}{|\{d \in D : t \in d\}|} \label{eq:idf}
 \end{equation}
 
-where~\(t\) is the term,~\(d\) is the document within the corpus, and ~\(D\) is the corpus.
+where~\(t\) is the term,~\(d\) is the document within the corpus, and~\(D\) is the corpus.
 
 Term Frequency-Inverse Document Frequency (TF-IDF) is the product of Term Frequency (TF) and Inverse Document Frequency (IDF) as shown in Equation~\eqref{eq:tfidf}.
 
@@ -191,7 +191,7 @@ The second approach that was used to generate a representative n-gram sequence i
 
 This tree has certain redundancies that can be removed in order to form larger groupings of words as nodes. There are two rules used for this tree collapse:
 
-\begin{enumerate}[label=(\arabic*)]
+\begin{enumerate}[label= (\arabic*)]
     \item{Parent and child relationship: If a parent has only one child, then these two words are combined.}
     \item{Leaf relationship: If two or more leaves are on the same level with
     the same parent, then these leafs are combined.}
@@ -285,7 +285,7 @@ Using an open-source Python library Gensim~\cite{gensim}, the TF-IDF scores are 
   P(a_{1} \land a_{2} \land \ldots \land a_{k} \textrm{ in } d \in D) = \prod_{i=1}^{k}\textrm{DocFreq}(a_{i}, D) \label{eq:TF-IDFWeighing}
 \end{equation}
 
-where~\(a_{i}\) is the~\(i^{th}\) term in the n-gram, ~\(k\) is the total number of n-grams within the n-gram sequence,~\(d\) is the document, and~\(D\) is the corpus.
+where~\(a_{i}\) is the~\(i^{th}\) term in the n-gram,~\(k\) is the total number of n-grams within the n-gram sequence,~\(d\) is the document, and~\(D\) is the corpus.
 
 In order to obtain a similarly naive estimate of the terms occurring in the necessary order, the input sentence is used as a template. Considering the number of rearrangements of the words in the input sentence with the terms in the n-gram in the proper order against all possible rearrangements of the words gives the probability that the n-gram appears in that sentence. Multiplying both of these values together gives a weight for each individual n-gram within the sequence. While there are issues with treating the words as independent and with treating a sentence as representative of a document, this allows us to handle arbitrary n-grams as well as keep the dictionary in a manageable size. There exist words like ``New'' and ``York'' that are frequently paired and in some corpora occur together more often than either word independently. Now having a score for each n-gram within the sequence, a score for that particular sequence can be obtained by weighing each n-gram cosine similarity with its TF-IDF score and then averaging by the TF-IDF score as shown in Equation \refeq{eq:averageTF-IDFScore}.
 
@@ -322,30 +322,29 @@ In order to allow more than the nine emojis seen in Figure~{\ref{fig:sentimentTa
 
 Translation algorithms are commonly evaluated by comparing the output from the algorithm to the known good translations. However, because there has not been much research done in this English to emoji translation domain, there was not a large enough sample data to test this algorithm in that fashion. Due to this fact, a new way to quantify the accuracy of the translation algorithm was needed. The testing algorithm developed starts by generating an emoji translation for a given number of input sentences. These emoji translations are presented to a user for translation back into English sentences. A direct numerical comparison can then be drawn between the input sentence to the algorithm and the sentence provided by the human using the cosine difference between the vectorized sentences. One major downside to this testing is that it is human-in-the-loop, meaning that human interaction is needed to complete the test. This leads to a slower overall testing process and removes the ability to test at each iteration.~The general flow for this test process is as follows:
 
-\begin{enumerate}[label=(\arabic*)]
-\item
+\begin{enumerate}[label= (\arabic*)]
+  \item
   Generate sentences in English.
-\item
+  \item
   Summarize each of the sentences using CoNFET.
-\item
+  \item
   Take the top 20 sentences sorted by the certainty score.
-\item
-  {For each machine translated sentence:}
-    \begin{enumerate}
-        \item
-          {Provide the user with the emojis.}
-        \item
-          {Provide the user with the length of the result sentence.}
-        \item
-          {Prompt the user to translate the emojis into a sentence.}
-    \end{enumerate}
-\item
-  {For each pair of the machine translated sentence and the user
-  translated sentence:}
-    \begin{enumerate}
-      \item
-        {Calculate the distance between the two sentences using Sent2Vec.}
-    \end{enumerate}
+  \item
+  For each machine translated sentence:
+  \begin{enumerate}
+    \item
+    Provide the user with the emojis.
+    \item
+    Provide the user with the length of the result sentence.
+    \item
+    Prompt the user to translate the emojis into a sentence.
+  \end{enumerate}
+  \item
+  For each pair of the machine translated sentence and the user translated sentence:
+  \begin{enumerate}
+    \item
+    Calculate the distance between the two sentences using Sent2Vec.
+  \end{enumerate}
 \end{enumerate}
 
 \section{Implementation and Results\label{sec:implementationAndResults}}
