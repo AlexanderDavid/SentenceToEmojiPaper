@@ -113,7 +113,7 @@ The algorithm presented in this paper is based on the concept of embeddings~\cit
 
 There have been other systems that accomplish a similar task in different ways. Emoji Dick~\cite{radford2016telephone} is a crowdsourced translation of Moby Dick into emojis using Amazon's Mechanical Turk crowdsourcing platform. In addition to explicit translation, some email clients are using pictographs to augment communication for individuals with cognitive disabilities~\cite{vandeghinste2017translating}. Outside of the realm of emojis for text translation, there is also research in the area of caption generation for images using emojis~\cite{mazoure-etal-2018-emojigan,cappallo2015image2emoji}
 
-The n-gram is a common motif within the domain of NLP. An n-gram is a sequence of~\(n\) contiguous terms within a document. The term can be anything like characters, syllables, or words. However, an n-gram is composed of words in our application. Commonly, unigrams, bigrams, and trigrams are used, which are n-grams of length one, two, and three, respectively. N-grams are pertinent in their use as the terms within the Term Frequency-Inverse Document Frequency scoring as the units of comparison for a given sentence when evaluating the cosine differences. Both of these topics of these topics are discussed in Section~\ref{sec:translationScoring}. To better understand the scoring discussion presented in later sections, we define concept of Term Frequency and Inverse Document Frequency as part of related work. The Term Frequency (TF)~\cite{Leskovec} is how often a given term appears in the document being summarized. While there are multiple ways to calculate the Term Frequency, it is typically defined by Equation~\eqref{eq:tf}:
+The n-gram is a common motif within the domain of NLP\@. An n-gram is a sequence of~\(n\) contiguous terms within a document. The term can be anything like characters, syllables, or words. However, an n-gram is composed of words in our application. Commonly, unigrams, bigrams, and trigrams are used, which are n-grams of length one, two, and three, respectively. N-grams are pertinent in their use as the terms within the Term Frequency-Inverse Document Frequency scoring as the units of comparison for a given sentence when evaluating the cosine differences. Both of these topics of these topics are discussed in Section~\ref{sec:translationScoring}. To better understand the scoring discussion presented in later sections, we define concept of Term Frequency and Inverse Document Frequency as part of related work. The Term Frequency (TF)~\cite{Leskovec} is how often a given term appears in the document being summarized. While there are multiple ways to calculate the Term Frequency, it is typically defined by Equation~\eqref{eq:tf}:
 
 \begin{equation}
   TF(t, d) = f_{t, d} \label{eq:tf}
@@ -326,7 +326,7 @@ Translation algorithms are commonly evaluated by comparing the output from the a
   \item
   Generate sentences in English.
   \item
-  Summarize each of the sentences using CoNFET.
+  Summarize each of the sentences using CoNFET\@.
   \item
   Take the top 20 sentences sorted by the certainty score.
   \item
@@ -349,7 +349,7 @@ Translation algorithms are commonly evaluated by comparing the output from the a
 
 \section{Implementation and Results\label{sec:implementationAndResults}}
 
-All of the code for this project was written in Python 3, using the following packages: SpaCy~\cite{spacy2}, NLTK~\cite{bird2009natural}, Gensim~\cite{gensim}, TextBlob~\cite{TextBlob}, ~Sent2Vec~\cite{pg2017unsu}, NumPy\cite{numpy}, and Jupyter\cite{Kluyver:2016aa}. The dataset used is the dataset from the emoji2vec~\cite{Eisner_2016}.
+All of the code for this project was written in Python 3, using the following packages: SpaCy~\cite{spacy2}, NLTK~\cite{bird2009natural}, Gensim~\cite{gensim}, TextBlob~\cite{TextBlob}, Sent2Vec~\cite{pg2017unsu}, NumPy\cite{numpy}, and Jupyter\cite{Kluyver:2016aa}. The dataset used is the dataset from the emoji2vec~\cite{Eisner_2016}.
 
 The results from the exhaustive n-gram generation algorithm are presented in Figure~\ref{fig:extractive}. Here, the average cosine difference was used. Emojis are just visualizations of specific descriptions as mentioned in Section~\ref{sec:n-gramToEmojiTranslation}. As such, some of these translations may not make sense unless the specific descriptions of emojis are known. For example, the n-gram ``They are playing'' is translated to the emoji~\img{emojis/1f3b4.png} as shown in the third test data in Figure~\ref{fig:extractive}. This emoji is known as the ``Flower \emph{Playing} Cards''. Once this description is known, the emoji translated sentence makes more sense.
 
