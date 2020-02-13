@@ -9,6 +9,7 @@
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref} % hrefs
 \usepackage[utf8]{inputenc} % Encode in utf8
+\usepackage{pgf}
 \usepackage{mathtools}
 \usepackage[linguistics]{forest}
 \usepackage{graphicx}
@@ -85,7 +86,7 @@ Emojis are a collection of emoticons that have been standardized by the Unicode 
 
 \section{Introduction}
 
-Automatic text summarization is a category of algorithms that aim to produce a small set of representative information from a larger input document. There are two general categories of automatic summarization: extractive and abstractive. Extractive summarization~\emph{extracts~}sentences and phrases that are already present within the document in order to produce an outline. While this method can produce representative summaries, it does have the drawback of limiting the vocabulary that can be used in the summary to the vocabulary within the original document. On the other hand, abstractive summarization tries to understand the information within the document and summarize it by creating new phrases and sentences. In our previous research~\cite{day_extractive}, we implemented two extractive summarization methods: Term Frequency-Inverse Document Frequency (TF-IDF) and TextRank and presented the results of running the algorithms on three different corpora:~\emph{Moby-Dick} by Herman Melville, a selection of Reuters news articles, and a selection of posts on Reddit. Both algorithms performed well on the short stories from Reddit. However, they did not perform optimally when presented with larger works which possesed a more complex story arc.
+Automatic text summarization is a category of algorithms that aim to produce a small set of representative information from a larger input document. There are two general categories of automatic summarization: extractive and abstractive. Extractive summarization~\emph{extracts~}sentences and phrases that are already present within the document in order to produce an outline. While this method can produce representative summaries, it does have the drawback of limiting the vocabulary that can be used in the summary to the vocabulary within the original document. On the other hand, abstractive summarization tries to understand the information within the document and summarize it by creating new phrases and sentences. In our previous research~\cite{day_extractive}, we implemented two extractive summarization methods: Term Frequency-Inverse Document Frequency (TF-IDF) and TextRank and presented the results of running the algorithms on three different corpora:~\emph{Moby-Dick} by Herman Melville, a selection of Reuters news articles, and a selection of posts on Reddit. Both algorithms performed well on the short stories from Reddit. However, they did not perform optimally when presented with larger works which possessed a more complex story arc.
 
 In the domain of Natural Language Processing (NLP), word embeddings~\cite{mikolov2013efficient} allow machines to produce representative, a fixed-length vector from a single word. This was a massive breakthrough in NLP mainly because many machine learning algorithms take a fixed-length vector as their input. Most previous attempts of word embeddings were lossy or produced vectors of an unwieldy length. Another benefit of this vector representation is that it allows a direct numerical comparison between the words. This work has been expanded from words to both emojis~\cite{Eisner_2016} and sentences~\cite{pg2017unsu}.
 
@@ -95,9 +96,9 @@ There are two possible uses for our algorithm: text summarization and communicat
 
 \section{Related Work}
 
-The algorithm presented in this paper is based on the concept of embeddings\cite{WhatAreW70}. Embeddings are a way of representing human text in a machine-understandable format. Normally this representation is a vector of floats with a range from -1 to 1 and a length of 300 to 700 depending on the application. The specific sentence vectorization model that our algorithm uses is Sent2Vec~\cite{pg2017unsu}. This model is based on Word2Vec~\cite{mikolov2013efficient} and extends the word vectorization into a representative sentence vectorization. Emoji2Vec~\cite{Eisner_2016} was also developed from Word2Vec, so that it can embed emojis in the same semantic space. This allows a direct vector comparison between words and emojis. While our algorithm does not use Emoji2Vec, it uses the same dataset and tackles a similar problem.
+The algorithm presented in this paper is based on the concept of embeddings~\cite{WhatAreW70}. Embeddings are a way of representing human text in a machine-understandable format. Normally this representation is a vector of floats with a range from -1 to 1 and a length of 300 to 700 depending on the application. The specific sentence vectorization model that our algorithm uses is Sent2Vec~\cite{pg2017unsu}. This model is based on Word2Vec~\cite{mikolov2013efficient} and extends the word vectorization into a representative sentence vectorization. Emoji2Vec~\cite{Eisner_2016} was also developed from Word2Vec, so that it can embed emojis in the same semantic space. This allows a direct vector comparison between words and emojis. While our algorithm does not use Emoji2Vec, it uses the same dataset and tackles a similar problem.
 
-There have been other systems that accomplish a similar task in different ways. Emoji Dick~\cite{radford2016telephone} is a crowdsourced translation of Moby Dick into emojis using Amazon Mechanical Turk crowdsourcing platform. In addition to explicit translation, some email clients are using pictographs to augment communication for individuals with cognitive disabilities~\cite{vandeghinste2017translating}. Outside of the realm of emojis for text translation, there is also research in the area of caption generation for images using emojis~\cite{mazoure-etal-2018-emojigan,cappallo2015image2emoji}
+There have been other systems that accomplish a similar task in different ways. Emoji Dick~\cite{radford2016telephone} is a crowd-sourced translation of Moby Dick into emojis using Amazon Mechanical Turk crowd-sourcing platform. In addition to explicit translation, some email clients are using pictographs to augment communication for individuals with cognitive disabilities~\cite{vandeghinste2017translating}. Outside of the realm of emojis for text translation, there is also research in the area of caption generation for images using emojis~\cite{mazoure-etal-2018-emojigan,cappallo2015image2emoji}
 
 The n-gram is a common motif within the domain of NLP\@. An n-gram is a sequence of~\(n\) contiguous terms within a document. The term can be anything like characters, syllables, or words. However, an n-gram is composed of words in our application. Commonly, unigrams, bigrams, and trigrams are used, which are n-grams of length one, two, and three, respectively. N-grams are pertinent in their use as the terms within the Term Frequency-Inverse Document Frequency scoring and as the units of comparison for a given sentence when evaluating the cosine distances. Both of these topics are discussed in Section 3.3. To better understand our scoring methods, we will briefly discuss the concepts of Term Frequency and Inverse Document Frequency in this section.
 
@@ -147,21 +148,16 @@ The first part of the CoNFET algorithm is splitting the input sentence into a se
 
 The initial approach for the n-gram sequence generation was a brute force approach that rests on the assumption that the optimal n-gram sequence is made up of contiguous words within the input sentence. That is, if the input is of the form ``a b c'', the optimal n-gram sequence will never contain ``c a'', ``c b'', nor ``b a''. The optimal n-gram sequence is defined as the sequence that produces the best summary. These n-gram sequences are generated first by producing all compositions of the integer that is equal to the length of the sentence. Each of those compositions is then extrapolated into an n-gram sequence. For example, the integer 3 can be generated by summing the elements in the following arrays: [1, 1, 1], [1, 2], [2, 1], or [3]. Any one of those arrays can be turned into an n-gram sequence by taking n-grams that are equal to the length of the element from the input sentence. For example, [1, 1, 1] is translated into a sequence of 3 uni-grams. The major downside to this approach is computational complexity. For a sentence with the word length~\(n\), this algorithm generates~\(2^{n-1}\) sequences. While speed was not a major concern with this algorithm, sentences with 10 or more words take prohibitively long to translate.
 
-Figure~\ref{fig:timing} depicts the translation time
-for sentences with different lengths using the exhaustive and dependency
-tree sentence composition algorithms. If the input sentence has more
-than 10 words, the translation time using the exhaustive algorithm
-increases exponentially. In fact, sentences with more than 11 words
-results in a memory exception in the development environment when
-trying to summarize with the exhaustive algorithm. Note that the CoNFET algorithm was executed through a Jupyter Notebook running within a Docker container on a system exposing one core of an Intel Xeon 6140 and 16 GB of RAM to the virtualized system.
-
-\begin{figure}[H]
+\begin{figure}[h]
   \begin{center}
-    \includegraphics[width=\columnwidth]{figures/timing.png}
+    % \includegraphics[width=\columnwidth]{figures/timing.pgf}
+    \scalebox{0.6}{\input{figures/timing.pgf}}
     \caption{Translation time of two n-gram sequence generation
       algorithms\label{fig:timing}}
   \end{center}
 \end{figure}
+
+Figure~\ref{fig:timing} depicts the translation time for sentences with different lengths using the exhaustive and dependency tree sentence composition algorithms. If the input sentence has more than 10 words, the translation time using the exhaustive algorithm increases exponentially. In fact, sentences with more than 11 words results in a memory exception in the development environment when trying to summarize with the exhaustive algorithm. Note that the CoNFET algorithm was executed through a Jupyter Notebook running within a Docker container on a system exposing one core of an Intel Xeon 6140 and 16 GB of RAM to the virtualized system.
 
 \subsubsection{Dependency Tree Informed N-Gram Sequence Generation\label{sec:dependency}}
 
