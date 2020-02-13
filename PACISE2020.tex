@@ -77,7 +77,7 @@
 \setlength{\parskip}{0em}
 \section*{ABSTRACT}
 \setlength{\parskip}{1em}
-Emojis are a collection of emoticons that have been standardized by the Unicode Consortium. Currently, there are over 3,000 emojis in the Unicode standard. These small pictographs can represent an object as vague as a laughter (\img{emojis/1f923.png}) to something as specific as a passport control (\img{emojis/1f6c2.png}). Due to their high information density and the sheer amount, emojis have become prevalent in common communication media such as SMS and Twitter. There is a need to increase natural language understanding in the emoji domain. To this end, we present the CoNFET (Composition of N-grams for Emoji Translation) algorithm to translate an English sentence into a sequence of emojis. This translation algorithm consists of three main parts: n-gram sequence generation, n-gram to emoji translation, and translation scoring. First, the input sentence is split into its constituent n-grams either in an exhaustive manner or using dependency relations. Second, the n-grams of the sentence are translated into emojis using the nearest neighbor in a vectorized linguistic space. Finally, these translations are scored using either a simple average or an average weighted by the Term Frequency-Inverse Document Frequency (TF-IDF) score of the n-gram. As the result, the sequence of emojis with the highest score is selected as an output of the sentence summarization.
+Emojis are a collection of emoticons that have been standardized by the Unicode Consortium. Currently, there are over 3,000 emojis in the Unicode standard. These small pictographs can represent an object as vague as a laughter (\img{emojis/1f923.png}) to something as specific as a passport control (\img{emojis/1f6c2.png}). Due to their high information density and the sheer amount, emojis have become prevalent in common communication media such as SMS and Twitter. There is a need to increase natural language understanding in the emoji domain. To this end, we present the CoNFET (Composition of N-grams for Emoji Translation) algorithm to translate an English sentence into a sequence of emojis. This translation algorithm consists of three main parts: the n-gram sequence generation, the n-gram to emoji translation, and the translation scoring. First, the input sentence is split into its constituent n-grams either in an exhaustive manner or using dependency relations. Second, the n-grams of the sentence are translated into emojis using the nearest neighbor in a vectorized linguistic space. Finally, these translations are scored using either a simple average or an average weighted by the Term Frequency-Inverse Document Frequency (TF-IDF) score of the n-gram. As the result, the sequence of emojis with the highest score is selected as an output of the sentence summarization.
 
 \begin{keywords}
   Natural Language Processing, Abstractive Text Summarization, Emoji, Word2Vec, Word Embeddings, TF-IDF
@@ -87,16 +87,21 @@ Emojis are a collection of emoticons that have been standardized by the Unicode 
 
 Automatic text summarization is a category of algorithms that aim to produce a small set of representative information from a larger input document. There are two general categories of automatic summarization: extractive and abstractive. Extractive summarization~\emph{extracts~}sentences and phrases that are already present within the document in order to produce an outline. While this method can produce representative summaries, it does have the drawback of limiting the vocabulary that can be used in the summary to the vocabulary within the original document. On the other hand, abstractive summarization tries to understand the information within the document and summarize it by creating new phrases and sentences. In our previous research~\cite{day_extractive}, we implemented two extractive summarization methods: Term Frequency-Inverse Document Frequency (TF-IDF) and TextRank and presented the results of running the algorithms on three different corpora:~\emph{Moby-Dick} by Herman Melville, a selection of Reuters news articles, and a selection of posts on Reddit. Both algorithms performed well on the short stories from Reddit. However, they did not perform optimally when presented with larger works which possesed a more complex story arc.
 
-In the domain of Natural Language Processing (NLP), word embeddings~\cite{mikolov2013efficient} allow machines to produce representative, a fixed-length vector from a single word. This was a massive breakthrough in NLP because many machine learning algorithms take a fixed-length vector as their input. Most previous attempts of word embeddings were lossy or produced vectors of an unwieldy length. Another benefit of this vector representation is that it allows a direct numerical comparison between the words. This work has been expanded from words to both emojis~\cite{Eisner_2016} and sentences~\cite{pg2017unsu}.
+In the domain of Natural Language Processing (NLP), word embeddings~\cite{mikolov2013efficient} allow machines to produce representative, a fixed-length vector from a single word. This was a massive breakthrough in NLP mainly because many machine learning algorithms take a fixed-length vector as their input. Most previous attempts of word embeddings were lossy or produced vectors of an unwieldy length. Another benefit of this vector representation is that it allows a direct numerical comparison between the words. This work has been expanded from words to both emojis~\cite{Eisner_2016} and sentences~\cite{pg2017unsu}.
 
-Our research aims to tackle abstractive summarization in a novel way by compressing a sentence into a series of emojis. Emojis are a pictographic language that is commonly used on the Internet and within text messages. In the latest emoji standard, there are 2,823 individual characters that can be both used alone and combined with joining emoji modify traits such as gender and skin color. There are two motivations for using emojis. First, emojis are very information-dense. This allows us to compress large chunks of information into a single emoji. That is, this single emoji can compress an entire sentence. For example, the running emoji (\img{emojis/1f3c3.png}) can represent a man who is running away from something or a man participating in a track event in just one character. Second, emojis have no formal grammar. This avoids a large issue on most neural machine translation, so we can focus on the adequacy rather than the fluidity of the produced translation. There are two possible uses for our algorithm: text summarization and communication facilitation. Producing a summary of a document using emojis could prove to be a quick way to let someone decide if a document is interesting to her/him without reading the whole document. It also could be used to facilitate communication across language barriers between people with learning disabilities~\cite{vandeghinste2017translating}.
+Our research aims to tackle abstractive text summarization in a novel way by compressing an English sentence into a series of emojis. Emojis are a pictographic language that is commonly used on the Internet and within text messages. In the latest emoji standard, there are 2,823 individual characters that can be both used alone and combined with joining emoji modify traits such as gender and skin color. There are two motivations for using emojis. First, emojis are very information-dense. This allows us to compress large chunks of the sentence into a single emoji. For example, the running emoji (\img{emojis/1f3c3.png}) can represent a man who is running away from something or a man participating in a track event in just one character. Second, emojis have no formal grammar. This avoids a large issue on most neural machine translation, so we can focus on the adequacy rather than the fluidity of the produced translation.
+
+There are two possible uses for our algorithm: text summarization and communication facilitation. Producing a summary of a document using emojis could prove to be a quick way to let someone decide if a document is interesting to her/him without reading the whole document. It could be used to facilitate communication across language barriers between people with learning disabilities~\cite{vandeghinste2017translating}.
 
 \section{Related Work}
-The algorithm presented in this paper is based on the concept of embeddings~\cite{WhatAreW70}. Embeddings are a way of representing human text in a machine-understandable format. Normally this representation is a vector of floats with a range from -1 to 1 and a length of 300 to 700 depending on the application. The specific sentence vectorization model that our algorithm uses is Sent2Vec~\cite{pg2017unsu}. This model is based on Word2Vec~\cite{mikolov2013efficient} and extends the word vectorization into a representative sentence vectorization. Emoji2Vec~\cite{Eisner_2016} was also developed from Word2Vec, so that it can embed emojis in the same semantic space. This allows a direct vector comparison between words and emojis. While our algorithm does not use Emoji2Vec, it uses the same dataset and tackles a similar problem.
 
-There have been other systems that accomplish a similar task in different ways. Emoji Dick~\cite{radford2016telephone} is a crowdsourced translation of Moby Dick into emojis using Amazon's Mechanical Turk crowdsourcing platform. In addition to explicit translation, some email clients are using pictographs to augment communication for individuals with cognitive disabilities~\cite{vandeghinste2017translating}. Outside of the realm of emojis for text translation, there is also research in the area of caption generation for images using emojis~\cite{mazoure-etal-2018-emojigan,cappallo2015image2emoji}
+The algorithm presented in this paper is based on the concept of embeddings\cite{WhatAreW70}. Embeddings are a way of representing human text in a machine-understandable format. Normally this representation is a vector of floats with a range from -1 to 1 and a length of 300 to 700 depending on the application. The specific sentence vectorization model that our algorithm uses is Sent2Vec~\cite{pg2017unsu}. This model is based on Word2Vec~\cite{mikolov2013efficient} and extends the word vectorization into a representative sentence vectorization. Emoji2Vec~\cite{Eisner_2016} was also developed from Word2Vec, so that it can embed emojis in the same semantic space. This allows a direct vector comparison between words and emojis. While our algorithm does not use Emoji2Vec, it uses the same dataset and tackles a similar problem.
 
-The n-gram is a common motif within the domain of NLP\@. An n-gram is a sequence of~\(n\) contiguous terms within a document. The term can be anything like characters, syllables, or words. However, an n-gram is composed of words in our application. Commonly, unigrams, bigrams, and trigrams are used, which are n-grams of length one, two, and three, respectively. N-grams are pertinent in their use as the terms within the Term Frequency-Inverse Document Frequency scoring as the units of comparison for a given sentence when evaluating the cosine differences. Both of these topics of these topics are discussed in Section~\ref{sec:translationScoring}. To better understand the scoring discussion presented in later sections, we define concept of Term Frequency and Inverse Document Frequency as part of related work. The Term Frequency (TF)~\cite{Leskovec} is how often a given term appears in the document being summarized. While there are multiple ways to calculate the Term Frequency, it is typically defined by Equation~\eqref{eq:tf}:
+There have been other systems that accomplish a similar task in different ways. Emoji Dick~\cite{radford2016telephone} is a crowdsourced translation of Moby Dick into emojis using Amazon Mechanical Turk crowdsourcing platform. In addition to explicit translation, some email clients are using pictographs to augment communication for individuals with cognitive disabilities~\cite{vandeghinste2017translating}. Outside of the realm of emojis for text translation, there is also research in the area of caption generation for images using emojis~\cite{mazoure-etal-2018-emojigan,cappallo2015image2emoji}
+
+The n-gram is a common motif within the domain of NLP\@. An n-gram is a sequence of~\(n\) contiguous terms within a document. The term can be anything like characters, syllables, or words. However, an n-gram is composed of words in our application. Commonly, unigrams, bigrams, and trigrams are used, which are n-grams of length one, two, and three, respectively. N-grams are pertinent in their use as the terms within the Term Frequency-Inverse Document Frequency scoring and as the units of comparison for a given sentence when evaluating the cosine distances. Both of these topics are discussed in Section 3.3. To better understand our scoring methods, we will briefly discuss the concepts of Term Frequency and Inverse Document Frequency in this section.
+
+Term Frequency (TF)~\cite{Leskovec} is how often a given term appears in the document being summarized. While there are multiple ways to calculate the TF value, it is typically defined by Equation~\eqref{eq:tf}:
 
 \begin{equation}
   TF(t, d) = f_{t, d} \label{eq:tf}
@@ -117,6 +122,8 @@ Term Frequency-Inverse Document Frequency (TF-IDF) is the product of Term Freque
 \begin{equation}
   TF-IDF(t, d, D) = TF(t, d) \cdot IDF(t, D) \label{eq:tfidf}
 \end{equation}
+
+where~\(t\) is the term,~\(d\) is the document, and~\(D\) is the corpus.
 
 Common words, such as ``the'', will appear in many documents and have a lower TF-IDF score. Words pertinent to the document should be relatively frequent within the document and less frequent in the corpus. As the result, the relevant words will boost its TF-IDF score. For instance, imagine a corpus of three sentences: ``The dog walks quickly.'', ``An apple falls from the tree.'', and ``The hero acted quickly.'' The Term Frequency of ``the'' within the first sentence is~\(\frac{1}{4}\) since 25 percent of the words are ``the''. However, there are three documents and ``the'' is in every document. Thus, its Inverse Document Frequency is~\( \log(\frac{3}{3}) = 0 \) and the TF-IDF score for ``the'' is~\(\frac{1}{4} \times 0\). On the other hand, the Term Frequency of ``dog'' within the first sentence is~\(\frac{1}{4}\). However, since it is only in the first sentence, its Inverse Document Frequency is~\(\log(\frac{3}{1})\) and the TF-IDF score for ``dog'' is~\(\frac{1}{4} \times \log(\frac{3}{1})\), approximately .275.
 
@@ -140,16 +147,21 @@ The first part of the CoNFET algorithm is splitting the input sentence into a se
 
 The initial approach for the n-gram sequence generation was a brute force approach that rests on the assumption that the optimal n-gram sequence is made up of contiguous words within the input sentence. That is, if the input is of the form ``a b c'', the optimal n-gram sequence will never contain ``c a'', ``c b'', nor ``b a''. The optimal n-gram sequence is defined as the sequence that produces the best summary. These n-gram sequences are generated first by producing all compositions of the integer that is equal to the length of the sentence. Each of those compositions is then extrapolated into an n-gram sequence. For example, the integer 3 can be generated by summing the elements in the following arrays: [1, 1, 1], [1, 2], [2, 1], or [3]. Any one of those arrays can be turned into an n-gram sequence by taking n-grams that are equal to the length of the element from the input sentence. For example, [1, 1, 1] is translated into a sequence of 3 uni-grams. The major downside to this approach is computational complexity. For a sentence with the word length~\(n\), this algorithm generates~\(2^{n-1}\) sequences. While speed was not a major concern with this algorithm, sentences with 10 or more words take prohibitively long to translate.
 
+Figure~\ref{fig:timing} depicts the translation time
+for sentences with different lengths using the exhaustive and dependency
+tree sentence composition algorithms. If the input sentence has more
+than 10 words, the translation time using the exhaustive algorithm
+increases exponentially. In fact, sentences with more than 11 words
+results in a memory exception in the development environment when
+trying to summarize with the exhaustive algorithm. Note that the CoNFET algorithm was executed through a Jupyter Notebook running within a Docker container on a system exposing one core of an Intel Xeon 6140 and 16 GB of RAM to the virtualized system.
+
 \begin{figure}[H]
   \begin{center}
-    % \includegraphics[width=\columnwidth]{figures/timing.png}
-    \scalebox{0.6}{\input{figures/timing.pgf}}
+    \includegraphics[width=\columnwidth]{figures/timing.png}
     \caption{Translation time of two n-gram sequence generation
       algorithms\label{fig:timing}}
   \end{center}
 \end{figure}
-
-Figure~\ref{fig:timing} depicts the translation time for sentences with different lengths using the exhaustive and dependency tree sentence composition algorithms. If the input sentence has more than 10 words, the translation time using the exhaustive algorithm increases exponentially. In fact, sentences with more than 11 words results in a memory exception in the development environment when trying to summarize with the exhaustive algorithm. Note that the CoNFET algorithm was executed through a Jupyter Notebook running within a Docker container on a system exposing one core of an Intel Xeon 6140 and 16 GB of RAM to the virtualized system.
 
 \subsubsection{Dependency Tree Informed N-Gram Sequence Generation\label{sec:dependency}}
 
@@ -176,9 +188,8 @@ This tree has certain redundancies that can be removed in order to form larger g
 
 \begin{enumerate}[label= (\arabic*)]
     \itemsep0em
-    \item{Parent and child relationship: If a parent has only one child, then these two words are combined.}
-    \item{Leaf relationship: If two or more leaves are on the same level with
-    the same parent, then these leafs are combined.}
+    \item{Parent and child relationship: If a parent has only one child, then the parent and the child are combined.}
+    \item{Leaf relationship: If two or more leaves are on the same level with the same parent, then these leaves are combined.}
 \end{enumerate}
 
 An example of the first tree collapse rule, that is, the parent and child relationship collapse, can be seen in Figure~\ref{fig:childBefore} and Figure~\ref{fig:childAfter}. The nodes ``homework'' and ``the'' are highlighted in Figure~\ref{fig:childBefore} to indicate that they fulfill the requirement of a parent with only one child. These two nodes can be collapsed into one node as shown in Figure~\ref{fig:childAfter}.
@@ -211,7 +222,7 @@ An example of the first tree collapse rule, that is, the parent and child relati
   \end{center}
 \end{figure}
 
-An example of the second tree collapse rule, that is, the leaf relationship collapse, can be seen in Figure~\ref{fig:beforeLeaf} and Figure~\ref{fig:afterLeaf}. In Figure~\ref{fig:beforeLeaf}, the three leaf nodes ``just'', ``before'', and ``class'' are highlighted to indicate that they are children of ``started'' and they are on the same level. These three nodes can be collapsed into one node as shown in Figure~\ref{fig:afterLeaf}.
+An example of the second tree collapse rule, that is, the leaf relationship collapse, can be seen in Figure~\ref{fig:beforeLeaf} and Figure~\ref{fig:afterLeaf}. In Figure~\ref{fig:beforeLeaf}, the three leaf nodes ``just'', ``before'', and ``class'' are highlighted to indicate that they are the children of ``started'' and they are on the same level. These three nodes can be collapsed into one node as shown in Figure~\ref{fig:afterLeaf}.
 
 \begin{figure}[H]
   \begin{center}
@@ -282,7 +293,7 @@ where~\(s_{i}\) is the cosine similarity score of the~\(i^{th}\) n-gram and~\(w_
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=0.90\columnwidth]{figures/sentiment_table1.png}
+    \includegraphics[width=0.70\columnwidth]{figures/sentiment_table1.png}
     \caption{Table used in conjunction with TextBlob for initial sentiment
       analysis\label{fig:sentimentTable}}
   \end{center}
@@ -290,7 +301,7 @@ where~\(s_{i}\) is the cosine similarity score of the~\(i^{th}\) n-gram and~\(w_
 
 \begin{figure*}[h]
   \begin{center}
-    \includegraphics[width=0.70\textwidth]{figures/sentiment_results1.png}
+    \includegraphics[width=0.90\textwidth]{figures/sentiment_results1.png}
     \caption{Preliminary results from scoring tweets\label{fig:tweetScoring}}
   \end{center}
 \end{figure*}
