@@ -5,7 +5,8 @@
 
 \usepackage{PACISEPaper} % Include the custom commands from the PACISEPaper.sty
 \usepackage{times} % Use the postscript times font
-\usepackage{enumitem} \usepackage[hidelinks]{hyperref} % hrefs
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref} % hrefs
 \usepackage[utf8]{inputenc} % Encode in utf8
 \usepackage{pgf}
 \usepackage{mathtools}
@@ -108,7 +109,7 @@ a more complex story arc.
 
 In the domain of Natural Language Processing (NLP), word
 embeddings~\cite{mikolov2013efficient} allow machines to produce representative,
- fixed-length vectors from a single word. This was a massive breakthrough in NLP
+fixed-length vectors from a single word. This was a massive breakthrough in NLP
 mainly because many machine learning algorithms take a fixed-length vector as
 their input. Most previous attempts of word embeddings were lossy or produced
 vectors of an unwieldy length. Another benefit of this vector representation is
@@ -122,13 +123,13 @@ pictographic language that is commonly used on the Internet and within text
 messages. In the latest emoji standard, there are 2,823 individual characters
 that can be both used alone or conjoined with modifiers to change, among other
 things, skin tones and gender. Because of their information density and lack of
-formal grammar emojis are ideal for text summarization. Emoji denseness allows the compression large chunks of
-the sentence into a single emoji. For example, the running emoji
-(\img{emojis/1f3c3.png}) can represent a man who is running away from something
-or a man participating in a track event in just one character. The lack of
-formal grammar avoids a large issue present in most neural machine
-translation, so we can focus on the adequacy rather than the fluidity of the
-produced translation.
+formal grammar emojis are ideal for text summarization. Emoji denseness allows
+the compression large chunks of the sentence into a single emoji. For example,
+the running emoji (\img{emojis/1f3c3.png}) can represent a man who is running
+away from something or a man participating in a track event in just one
+character. The lack of formal grammar avoids a large issue present in most
+neural machine translation, so we can focus on the adequacy rather than the
+fluidity of the produced translation.
 
 There are two primary uses for our algorithm: text summarization and
 communication facilitation. Producing a summary of a document using emojis could
@@ -205,13 +206,13 @@ Equation~\eqref{eq:tfidf}.
 
 where~\(t\) is the term,~\(d\) is the document, and~\(D\) is the corpus.
 
-Common words, such as ``the'', will appear in many documents and have a lower
+Common words, such as ``the,'' will appear in many documents and have a lower
 TF-IDF score. Words pertinent to the document should be relatively frequent
 within the document and less frequent in the corpus. As the result, the relevant
 words will boost its TF-IDF score. For instance, imagine a corpus of three
 sentences: ``The dog walks quickly.'', ``An apple falls from the tree.'', and
 ``The hero acted quickly.'' The Term Frequency of ``the'' within the first
-sentence is~\(\frac{1}{4}\) since 25 percent of the words are ``the''. However,
+sentence is~\(\frac{1}{4}\) since 25 percent of the words are ``the.'' However,
 there are three documents and ``the'' is in every document. Thus, its Inverse
 Document Frequency is~\( \log(\frac{3}{3}) = 0 \) and the TF-IDF score for
 ``the'' is~\(\frac{1}{4} \times 0\). On the other hand, the Term Frequency of
@@ -247,7 +248,18 @@ returned as the summary.
 
 \subsection{N-Gram Sequence Generation\label{sec:N-gramSequenceGeneration}}
 
-The first part of the CoNFET algorithm is splitting the input sentence into a series of n-grams denoted as an n-gram sequence. For example, the unigrams from the sentence ``The dog bit me'' would be ``the,'' ``dog,'' ``bit,'' and ``me.'' Similarly, the bigrams from that same sentence would be ``The dog'', ``dog bit'', and ``bit me''. This sequence of n-grams would ideally split the sentence into its constituent words and then translate them into emojis. Two approaches have been applied to generate n-gram sequences: exhaustive n-gram generation and dependency tree informed n-gram generation. Section~\ref{sec:exhaustive} describes exhaustive generation, meaning that every n-gram sequence is generated and tested. Section~\ref{sec:dependency} describes the second approach that generates the sequence in a way informed by the relations between words in the input sentence.
+The first part of the CoNFET algorithm is splitting the input sentence into a
+series of n-grams denoted as an n-gram sequence. For example, the unigrams from
+the sentence ``The dog bit me'' would be ``the,'' ``dog,'' ``bit,'' and ``me.''
+Similarly, the bigrams from that same sentence would be ``The dog,'' ``dog
+bit,'' and ``bit me.'' This sequence of n-grams would ideally split the sentence
+into its constituent words and then translate them into emojis. Two approaches
+have been applied to generate n-gram sequences: exhaustive n-gram generation and
+dependency tree informed n-gram generation. Section~\ref{sec:exhaustive}
+describes exhaustive generation, meaning that every n-gram sequence is generated
+and tested. Section~\ref{sec:dependency} describes the second approach that
+generates the sequence in a way informed by the relations between words in the
+input sentence.
 
 \subsubsection{Exhaustive N-Gram Sequence Generation\label{sec:exhaustive}}
 
@@ -256,18 +268,18 @@ approach that rests on the assumption that the optimal n-gram sequence is made
 up of contiguous words within the input sentence. That is, if the input is of
 the form ``a b c,'' the optimal n-gram sequence will never contain ``c a,'' ``c
 b,'' nor ``b a.'' The optimal n-gram sequence is defined as the sequence that
-produces the best summary. These n-gram sequences are generated by
-producing all compositions of the integer that is equal to the length of the
-sentence. Each of those compositions is then extrapolated into an n-gram
-sequence. For example, the integer 3 can be generated by summing the elements in
-the following arrays: [1, 1, 1], [1, 2], [2, 1], or [3]. Any one of those arrays
-can be turned into an n-gram sequence by taking n-grams that are equal to the
-length of the element from the input sentence. For example, [1, 1, 1] is
-translated into a sequence of 3 uni-grams. The major downside to this approach
-is computational complexity. For a sentence with the word length~\(n\), this
-algorithm generates~\(2^{n-1}\) sequences. While speed was not a major concern
-with this algorithm, sentences with 10 or more words take prohibitively long to
-translate, as shown in Figure~\ref{fig:timing}.
+produces the best summary. These n-gram sequences are generated by producing all
+compositions of the integer that is equal to the length of the sentence. Each of
+those compositions is then extrapolated into an n-gram sequence. For example,
+the integer 3 can be generated by summing the elements in the following arrays:
+[1, 1, 1], [1, 2], [2, 1], or [3]. Any one of those arrays can be turned into an
+n-gram sequence by taking n-grams that are equal to the length of the element
+from the input sentence. For example, [1, 1, 1] is translated into a sequence of
+3 uni-grams. The major downside to this approach is computational complexity.
+For a sentence with the word length~\(n\), this algorithm generates~\(2^{n-1}\)
+sequences. While speed was not a major concern with this algorithm, sentences
+with 10 or more words take prohibitively long to translate, as shown in
+Figure~\ref{fig:timing}.
 
 \begin{figure}[h]
   \begin{center}
@@ -313,7 +325,8 @@ verb ``finished'' to inform who executed the action.
 \end{figure}
 
 The tree in Figure~\ref{fig:dep} has certain redundancies that can be removed in
-order to form larger groupings of words as nodes. There are two rules used for this tree collapse:
+order to form larger groupings of words as nodes. There are two rules used for
+this tree collapse:
 
 \begin{enumerate}[label= (\arabic*)]
   \itemsep0em
@@ -357,7 +370,7 @@ shown in Figure~\ref{fig:childAfter}.
 An example of the second tree collapse rule, that is, the leaf relationship
 collapse, can be seen in Figure~\ref{fig:beforeLeaf} and
 Figure~\ref{fig:afterLeaf}. In Figure~\ref{fig:beforeLeaf}, the three leaf nodes
-``just'', ``before'', and ``class'' are highlighted to indicate that they are
+``just,'' ``before,'' and ``class'' are highlighted to indicate that they are
 the children of ``started'' and they are on the same level. These three nodes
 can be collapsed into one node as shown in Figure~\ref{fig:afterLeaf}.
 
@@ -394,16 +407,16 @@ n-grams and emojis. Both the emoji description and the n-gram in question can be
 vectorized, so that a direct mathematical comparison can be made. The
 vectorization is performed using Sent2Vec~\cite{pg2017unsu}. Once the emoji and
 the n-gram are in the same format, the cosine distance calculation as shown in
-Equation~\refeq{eq:cos} is used for
-a direct similarity comparison. The best emoji is defined as the emoji with a
-description that has the lowest cosine distance to the n-gram.
+Equation~\refeq{eq:cos} is used for a direct similarity comparison. The best
+emoji is defined as the emoji with a description that has the lowest cosine
+distance to the n-gram.
 
 \begin{equation}
   cosine \textrm{ }distance = 1 - \frac{\vec{u} \cdot \vec{v}}{||\vec{u}||_{2}||\vec{v}||_{2}}\label{eq:cos}
 \end{equation}
 
-where~\(\vec{u}\) and~\(\vec{v}\) are the two equal-length vectors that the cosine distance is being
-calculated for.
+where~\(\vec{u}\) and~\(\vec{v}\) are the two equal-length vectors that the
+cosine distance is being calculated for.
 
 \subsection{Translation Scoring\label{sec:translationScoring}}
 
@@ -415,15 +428,14 @@ weighing metric using TF-IDF methods are used in our algorithm and discussed in
 Section~\ref{sec:averageCosineDistance} and Section~\ref{sec:TF-IDFWeighing},
 respectively.
 
-\subsubsection{Average Cosine Distance
-  Scoring\label{sec:averageCosineDistance}}
+\subsubsection{Average Cosine Distance Scoring\label{sec:averageCosineDistance}}
 
 A score for the overall n-gram sequence is generated by adding up the cosine
 similarity of each n-gram composing the sequence and then dividing by the number
 of n-grams as shown in Equation \refeq{eq:averageCosineDistance}. The average
-cosine distance was chosen as a metric because it is computationally
-inexpensive to calculate and it allows all n-gram scores to contribute equally
-into the overall score of the translation.
+cosine distance was chosen as a metric because it is computationally inexpensive
+to calculate and it allows all n-gram scores to contribute equally into the
+overall score of the translation.
 
 \begin{equation}
   \textrm{Average Cos Distance Score} = \frac{\sum_{i=1}^{k}s_{i}}{k} \label{eq:averageCosineDistance}
@@ -512,21 +524,22 @@ from -1 to 1 and the subjectivity is ranged from 0 to 1.
 In order to allow more than the nine emojis seen in
 Figure~{\ref{fig:sentimentTable}}, and use emojis more in line with how they are
 used on social media, emojis were scored using tweets. Using Twitter's API,
-between 30 and 100 tweets were gathered for each emoji. Each tweet was scored using
-TextBlob and the scores for each emoji were averaged. Then, the emoji with the
-average sentiment score closest --- using the standard deviation as the distance
---- to the sentiment score of the input sentence is selected as the sentiment
-emoji. The results from scoring tweets are shown in
+between 30 and 100 tweets were gathered for each emoji. Each tweet was scored
+using TextBlob and the scores for each emoji were averaged. Then, the emoji with
+the average sentiment score closest --- using the standard deviation as the
+distance --- to the sentiment score of the input sentence is selected as the
+sentiment emoji. The results from scoring tweets are shown in
 Figure~\ref{fig:tweetScoring}. Many emojis end up with the polarity and
 subjectivity values close to zero, which does not allow distinguishing between
 emojis when considering distance from the input. There are two reasons for this:
-the size of the dataset and the lack of preprocessing of the tweet data. First, due to
-Twitter's limitation on daily API queries, the dataset gathered was fairly limited. This issue is
-easily addressed by gathering data for a longer time. Second, misspellings,
-slang, and grammatically incorrect sentences yield poor results in TextBlob. For
-example, even a simple misspelling such as ``tightt'' for ``tight'' is enough to
-give the tweet a score of zero. This preprocessing issue could be fixed by
-including a more complex cleaning pipeline before sentiment analysis. An implementation linking an existing public
+the size of the dataset and the lack of preprocessing of the tweet data. First,
+due to Twitter's limitation on daily API queries, the dataset gathered was
+fairly limited. This issue is easily addressed by gathering data for a longer
+time. Second, misspellings, slang, and grammatically incorrect sentences yield
+poor results in TextBlob. For example, even a simple misspelling such as
+``tightt'' for ``tight'' is enough to give the tweet a score of zero. This
+preprocessing issue could be fixed by including a more complex cleaning pipeline
+before sentiment analysis. An implementation linking an existing public
 emoji-sentiment dataset from something like Kaggle to sentiment scores of the
 input sentence instead of scoring the tweets using TextBlob might produce better
 results. This consideration was initially discarded for two reasons: first,
@@ -552,18 +565,18 @@ algorithm to the known good translations. However, because there has not been
 much research done in this English to emoji translation domain, there was not a
 large enough amount of sample data to test this algorithm in that fashion.
 Furthermore, the allocated research time did not allow for the creation of such
-a data set. Due to this
-fact, a new way to quantify the accuracy of the translation algorithm was
-needed. The testing algorithm developed starts by generating an emoji
-translation for a given number of input sentences. These emoji translations are
-presented to a user for translation back into English sentences. A direct
-numerical comparison can then be drawn between the input sentence to the
-algorithm and the sentence provided by the human using the cosine distance
-between the vectorized sentences. One major downside to this testing is that it
-is human-in-the-loop, meaning that human interaction is needed to complete the
-test. This leads to a slower overall testing process, introduces potential bias
-due to educational, cultural, and societal differences, and removes the ability to
-test at each iteration. The general flow for this test process is as follows:
+a data set. Due to this fact, a new way to quantify the accuracy of the
+translation algorithm was needed. The testing algorithm developed starts by
+generating an emoji translation for a given number of input sentences. These
+emoji translations are presented to a user for translation back into English
+sentences. A direct numerical comparison can then be drawn between the input
+sentence to the algorithm and the sentence provided by the human using the
+cosine distance between the vectorized sentences. One major downside to this
+testing is that it is human-in-the-loop, meaning that human interaction is
+needed to complete the test. This leads to a slower overall testing process,
+introduces potential bias due to educational, cultural, and societal
+differences, and removes the ability to test at each iteration. The general flow
+for this test process is as follows:
 
 \begin{enumerate}[label= (\arabic*)]
   \itemsep0em
@@ -596,8 +609,8 @@ dataset from the emoji2vec~\cite{Eisner_2016}.
 The results from the exhaustive n-gram generation algorithm are presented in
 Figure~\ref{fig:extractive}. The results include the sentence inputted to the
 algorithm, the emojis generated from the algorithm, and the score attributed to
-each translation. Here, the average cosine distance was used.
-Because emojis are just visualizations of specific descriptions as mentioned in
+each translation. Here, the average cosine distance was used. Because emojis are
+just visualizations of specific descriptions as mentioned in
 Section~\ref{sec:n-gramToEmojiTranslation}. As such, some of these translations
 may not make sense unless the specific descriptions of emojis are known. For
 example, the n-gram ``They are playing'' is translated to the
@@ -618,8 +631,8 @@ The results from the dependency tree n-gram generation algorithm are presented
 in Figure~\ref{fig:dependency}. Again, average cosine distance was used. These
 summary results are not as good as the results of the exhaustive algorithm. This
 is mainly because the dependency tree algorithm does not take into account the
-score that the translation of the proposed sequence will have. Alternatively, the exhaustive algorithm splits the sentence as to maximize the resulting
-score.
+score that the translation of the proposed sequence will have. Alternatively,
+the exhaustive algorithm splits the sentence as to maximize the resulting score.
 
 \begin{figure}[H]
   \begin{center}
@@ -641,23 +654,23 @@ field of communication between individuals with cognitive disabilities or for
 describing a long document in a condensed way.
 
 One of the main drawbacks of this implementation was the limited
-dataset~\cite{Eisner_2016}. The dataset defines the complexity of the output
+dataset~\cite{Eisner_2016}. The deadest defines the complexity of the output
 language and it is used as a translation mapping from emojis to English phrases
-and vice versa. In the future, some exploration will be
-done with scraping different emoji database-like sites (e.g. Emojipedia) to
-create a richer output language. In addition to the size limitations, the
-dataset is also limited in the sense that one keyword may have multiple emojis
-that represent it. In fact, in our dataset, 15\%, around 720 descriptions have
-multiple emojis. This means that some n-grams have multiple emojis that are all
-equally close. In the future, we will investigate alternate heuristics by using
-the other keywords of an emoji when deciding what translation is most suitable.
-Finally, the last problem is that each n-gram is translated individually.
-Therefore, no previous context in the sentence is used in the n-gram
-translation. If the previous n-grams can be taken into account while translating
-the current n-gram, this may produce a more representative emoji sequence. Also,
-the test plan detailed in Section~\ref{sec:testPlan} should be implemented and
-evaluated. While additional work in this area does need to be conducted to
-improve the algorithm, this initial effort has provided a meaningful start.
+and vice versa. In the future, some exploration will be done with scraping
+different emoji database-like sites (e.g. Emojipedia) to create a richer output
+language. In addition to the size limitations, the dataset is also limited in
+the sense that one keyword may have multiple emojis that represent it. In fact,
+in our dataset, 15\%, around 720 descriptions have multiple emojis. This means
+that some n-grams have multiple emojis that are all equally close. In the
+future, we will investigate alternate heuristics by using the other keywords of
+an emoji when deciding what translation is most suitable. Finally, the last
+problem is that each n-gram is translated individually. Therefore, no previous
+context in the sentence is used in the n-gram translation. If the previous
+n-grams can be taken into account while translating the current n-gram, this may
+produce a more representative emoji sequence. Also, the test plan detailed in
+Section~\ref{sec:testPlan} should be implemented and evaluated. While additional
+work in this area does need to be conducted to improve the algorithm, this
+initial effort has provided a meaningful start.
 
 \makeatother \bibliographystyle{PACISE} \bibliography{biblio}
 
